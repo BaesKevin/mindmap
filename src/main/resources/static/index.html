@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/foundation/foundation.css">
+    <title>Foundation Kitchensink</title>
+    <link rel="stylesheet" href="assets/css/vis-network.min.css">
+
+    <style type="text/css">
+        #mynetwork {
+            /*width: 100vw;*/
+            width: 600px;
+            /*height: 50vh;*/
+            height: 400px;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+<div class="off-canvas position-left reveal-for-large" id="offCanvas" data-off-canvas>
+
+    <!-- Close button -->
+    <button class="close-button" aria-label="Close menu" type="button" data-close>
+        <span aria-hidden="true">&times;</span>
+    </button>
+
+    <!-- Menu -->
+    <ul class="vertical menu">
+        <li><a href="#">Foundation</a></li>
+        <li><a href="#">Dot</a></li>
+        <li><a href="#">ZURB</a></li>
+        <li><a href="#">Com</a></li>
+        <li><a href="#">Slash</a></li>
+        <li><a href="#">Sites</a></li>
+    </ul>
+
+
+
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+    <div class="title-bar">
+        <div class="title-bar-left">
+            <button class="menu-icon" type="button" data-open="offCanvas"></button>
+            <h1 class="title-bar-title">Mind maps</h1>
+        </div>
+    </div>
+    <!-- Your page content lives here -->
+
+    <p>
+        Create a simple network with some nodes and edges. Some of the events are logged in the console in improve readability.
+    </p>
+
+    <div id="mynetwork"></div>
+    <pre id="eventSpan"></pre>
+
+</div>
+<script src="assets/js/foundation/jquery.js"></script>
+<script src="assets/js/foundation/what-input.js"></script>
+<script src="assets/js/foundation/foundation.js"></script>
+<script src="assets/js/vis.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
