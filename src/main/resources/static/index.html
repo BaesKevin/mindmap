@@ -5,16 +5,7 @@
     <link rel="stylesheet" href="assets/css/foundation/foundation.css">
     <title>Foundation Kitchensink</title>
     <link rel="stylesheet" href="assets/css/vis-network.min.css">
-
-    <style type="text/css">
-        #mynetwork {
-            /*width: 100vw;*/
-            width: 600px;
-            /*height: 50vh;*/
-            height: 400px;
-            border: 1px solid lightgray;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 <div class="off-canvas position-left reveal-for-large" id="offCanvas" data-off-canvas>
@@ -39,19 +30,42 @@
 </div>
 
 <div class="off-canvas-content" data-off-canvas-content>
-    <div class="title-bar">
+    <header class="title-bar">
         <div class="title-bar-left">
             <button class="menu-icon" type="button" data-open="offCanvas"></button>
             <h1 class="title-bar-title">Mind maps</h1>
         </div>
-    </div>
+    </header>
     <!-- Your page content lives here -->
 
     <p>
         Create a simple network with some nodes and edges. Some of the events are logged in the console in improve readability.
     </p>
 
-    <div id="mynetwork"></div>
+    <form action="#" id="exportForm">
+        <input type="submit" name="exportButton" value="Export"/>
+    </form>
+    <form action="#" id="importForm">
+        <input type="submit" name="importButton" value="Import"/>
+    </form>
+
+    <div class="mindmapcontainer">
+        <div id="mynetwork"></div>
+        <div id="network-popUp" class="hidden">
+            <div>
+                <span id="operation">Add Node</span> <br>
+                <table style="margin:auto;"><tbody>
+
+                <tr>
+                    <td>label</td><td><input id="node-label" value="new value"></td>
+                </tr></tbody></table>
+                <input type="button" value="save" id="saveButton">
+                <input type="button" value="cancel" id="cancelButton">
+            </div>
+        </div>
+    </div>
+
+
     <pre id="eventSpan"></pre>
 
 </div>

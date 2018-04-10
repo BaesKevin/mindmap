@@ -2,41 +2,51 @@ $(document).foundation();
 
 $(document).ready(function(){
    initVis();
+   document.getElementById("exportForm").onsubmit = exportNetwork;
+   document.getElementById("importForm").onsubmit = importNetwork;
+
+   importNetwork();
+
+
+
 });
 
+let network;
+let data;
+let nodes;
+let edges;
+
 function initVis(){
-    // create an array with nodes
-    var nodes = new vis.DataSet([
-        {id: 1, label: 'Node 1', title: 'I have a popup!'},
-        {id: 2, label: 'Node 2', title: 'I have a popup!'},
-        {id: 3, label: 'Node 3', title: 'I have a popup!'},
-        {id: 4, label: 'Node 4', title: 'I have a popup!'},
-        {id: 5, label: 'Node 5', title: 'I have a popup!'}
-    ]);
-    // create an array with edges
-    var edges = new vis.DataSet([
-        {from: 1, to: 3},
-        {from: 1, to: 2},
-        {from: 2, to: 4},
-        {from: 2, to: 5}
-    ]);
-    // create a network
-    var container = document.getElementById('mynetwork');
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-    var options = {
+//     // create an array with nodes
+//     nodeData = [
+//         {id: 1, label: 'Node 1', title: 'I have a popup!'},
+//         {id: 2, label: 'Node 2', title: 'I have a popup!'},
+//         {id: 3, label: 'Node 3', title: 'I have a popup!'},
+//         {id: 4, label: 'Node 4', title: 'I have a popup!'},
+//         {id: 5, label: 'Node 5', title: 'I have a popup!'}
+//     ];
+//
+//     edgeData = [
+//         {from: 1, to: 3},
+//         {from: 1, to: 2},
+//         {from: 2, to: 4},
+//         {from: 2, to: 5}
+//     ];
+//
+//     nodes = new vis.DataSet(nodeData);
+//     edges = new vis.DataSet(edgeData);
+
+    let container = document.getElementById('mynetwork');
+
+    // data = {
+    //     nodes: nodes,
+    //     edges: edges
+    // };
+    let options = {
         interaction:{hover:true},
         manipulation: {
             enabled: true,
-            editNode: function(edgeData, callback){
-                alert("editing node");
-
-                network.manipulation.options.editNode = undefined;
-                // console.log(network);
-                callback(edgeData);
-            }
+            editNode: editNode
         },
         edges: {
             arrows: 'to',
@@ -56,71 +66,136 @@ function initVis(){
             enabled: false
         }
     };
-    var network = new vis.Network(container, data, options);
-    network.on("click", function (params) {
-        params.event = "[original event]";
-        document.getElementById('eventSpan').innerHTML = '<h2>Click event:</h2>' + JSON.stringify(params, null, 4);
-        console.log('click event, getNodeAt returns: ' + this.getNodeAt(params.pointer.DOM));
-    });
-    network.on("doubleClick", function (params) {
-        params.event = "[original event]";
-        document.getElementById('eventSpan').innerHTML = '<h2>doubleClick event:</h2>' + JSON.stringify(params, null, 4);
-    });
-    network.on("oncontext", function (params) {
-        params.event = "[original event]";
-        document.getElementById('eventSpan').innerHTML = '<h2>oncontext (right click) event:</h2>' + JSON.stringify(params, null, 4);
-    });
-    network.on("dragStart", function (params) {
-        // There's no point in displaying this event on screen, it gets immediately overwritten
-        params.event = "[original event]";
-        console.log('dragStart Event:', params);
-        console.log('dragStart event, getNodeAt returns: ' + this.getNodeAt(params.pointer.DOM));
-    });
-    network.on("dragging", function (params) {
-        params.event = "[original event]";
-        document.getElementById('eventSpan').innerHTML = '<h2>dragging event:</h2>' + JSON.stringify(params, null, 4);
-    });
-    network.on("dragEnd", function (params) {
-        params.event = "[original event]";
-        document.getElementById('eventSpan').innerHTML = '<h2>dragEnd event:</h2>' + JSON.stringify(params, null, 4);
-        console.log('dragEnd Event:', params);
-        console.log('dragEnd event, getNodeAt returns: ' + this.getNodeAt(params.pointer.DOM));
-    });
-    network.on("zoom", function (params) {
-        document.getElementById('eventSpan').innerHTML = '<h2>zoom event:</h2>' + JSON.stringify(params, null, 4);
-    });
-    network.on("showPopup", function (params) {
-        document.getElementById('eventSpan').innerHTML = '<h2>showPopup event: </h2>' + JSON.stringify(params, null, 4);
-    });
-    network.on("hidePopup", function () {
-        console.log('hidePopup Event');
-    });
-    network.on("select", function (params) {
-        console.log('select Event:', params);
-    });
-    network.on("selectNode", function (params) {
-        console.log('selectNode Event:', params);
-    });
-    network.on("selectEdge", function (params) {
-        console.log('selectEdge Event:', params);
-    });
-    network.on("deselectNode", function (params) {
-        console.log('deselectNode Event:', params);
-    });
-    network.on("deselectEdge", function (params) {
-        console.log('deselectEdge Event:', params);
-    });
-    network.on("hoverNode", function (params) {
-        console.log('hoverNode Event:', params);
-    });
-    network.on("hoverEdge", function (params) {
-        console.log('hoverEdge Event:', params);
-    });
-    network.on("blurNode", function (params) {
-        console.log('blurNode Event:', params);
-    });
-    network.on("blurEdge", function (params) {
-        console.log('blurEdge Event:', params);
+    network = new vis.Network(container, data, options);
+
+}
+
+function editNode(data, callback) {
+    // filling in the popup DOM elements
+    document.getElementById('operation').innerHTML = "Edit Node";
+    document.getElementById('node-label').value = data.label;
+    document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
+    document.getElementById('cancelButton').onclick = cancelEdit.bind(this,callback);
+
+    let networkPopup = document.getElementById('network-popUp');
+    networkPopup.className = "";
+    let labelInput = document.querySelector("input#node-label");
+    labelInput.setSelectionRange(0, labelInput.value.length);
+}
+
+function saveData(data,callback) {
+    data.label = document.getElementById('node-label').value;
+    clearPopUp();
+    callback(data);
+}
+
+function clearPopUp() {
+    document.getElementById('saveButton').onclick = null;
+    document.getElementById('cancelButton').onclick = null;
+    document.getElementById('network-popUp').className = "hidden";
+}
+
+function cancelEdit(callback) {
+    clearPopUp();
+    callback(null);
+}
+
+
+
+function exportNetwork(e) {
+    e.preventDefault();
+
+    console.log(nodes.get());
+    console.log(edges.get());
+
+    let exportData = {
+        nodeData: nodes.get(),
+        edgeData: edges.get()
+    };
+
+    localStorage.setItem("network", JSON.stringify(exportData));
+}
+
+function importNetwork(e) {
+    if(e){
+        e.preventDefault();
+    }
+
+    let networkFromStorage = localStorage.getItem("network");
+
+    if(networkFromStorage !== null){
+        let networkData = JSON.parse(networkFromStorage);
+        nodes = new vis.DataSet(networkData.nodeData);
+        edges = new vis.DataSet(networkData.edgeData);
+
+    } else {
+        nodes = new vis.DataSet();
+        edges = new vis.DataSet();
+    }
+
+    data = {
+        nodes: nodes ,
+        edges: edges
+    };
+
+    initVis(data);
+
+}
+
+function addConnections(elem, index) {
+    // need to replace this with a tree of the network, then get child direct children of the element
+    elem.connections = network.getConnectedNodes(index);
+}
+
+function getNodeData(data) {
+    let networkNodes = [];
+
+    data.forEach(function(elem, index, array) {
+        networkNodes.push({id: elem.id, label: elem.id, x: elem.x, y: elem.y});
     });
 
+    return new vis.DataSet(networkNodes);
+}
+
+function getNodeById(data, id) {
+    for (let n = 0; n < data.length; n++) {
+        if (data[n].id == id) {  // double equals since id can be numeric or string
+            return data[n];
+        }
+    };
+
+    throw 'Can not find id \'' + id + '\' in data';
+}
+
+function getEdgeData(data) {
+    let networkEdges = [];
+
+    data.forEach(function(node) {
+        // add the connection
+        node.connections.forEach(function(connId, cIndex, conns) {
+            networkEdges.push({from: node.id, to: connId});
+            let cNode = getNodeById(data, connId);
+
+            let elementConnections = cNode.connections;
+
+            // remove the connection from the other node to prevent duplicate connections
+            let duplicateIndex = elementConnections.findIndex(function(connection) {
+                return connection == node.id; // double equals since id can be numeric or string
+            });
+
+
+            if (duplicateIndex != -1) {
+                elementConnections.splice(duplicateIndex, 1);
+            };
+        });
+    });
+
+    return new vis.DataSet(networkEdges);
+}
+
+function objectToArray(obj) {
+    return Object.keys(obj).map(function (key) {
+        obj[key].id = key;
+        return obj[key];
+    });
 }
