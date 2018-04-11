@@ -3,17 +3,32 @@ package be.howest.kevin.mindmap.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class MindMap {
+	@Id
 	String name;
+	
+	@OneToMany(cascade = CascadeType.ALL, 
+	        orphanRemoval = true)
 	List<Node> nodes;
+	@OneToMany(cascade = CascadeType.ALL, 
+	        orphanRemoval = true)
 	List<Edge> edges;
 	
-	private MindMap() {}
-	
-	public MindMap(String name) {
-		this.name = name;
+	private MindMap() {
+
 		nodes = new ArrayList<>();
 		edges = new ArrayList<>();
+	}
+	
+	public MindMap(String name) {
+		this();
+		this.name = name;
 	}
 
 	public String getName() {
