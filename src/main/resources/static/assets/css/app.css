@@ -1,10 +1,27 @@
-.mindmapcontainer{
-    position: relative;
-    width: 60vw;
-    height: 80vh;
+#offCanvas .close-button{
+    z-index: 1; /* necessary because the menu will overlap the button */
 }
 
+.off-canvas-content{
+    display:flex;
+    flex-flow: column;
+    height:100vh;
+}
 
+.title-bar{
+    flex: 0 1 auto;
+}
+
+.mindmapcontainer{
+    position: relative;
+    flex: 1 1 auto;    /*width: 60vw;*/
+    /*height: 100vh;*/
+    display: flex;
+}
+
+.hidden{
+    display: none;
+}
 
 #network-popUp{
      /*now the left edge is centered*/
@@ -22,27 +39,16 @@
     border: 2px solid blue;
 }
 
-.hidden{
-    display: none;
-}
+
 
 #mynetwork {
-    width: 60vw;
-    height: 80vh;
-    border: 1px solid lightgray;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
 }
 
-div.vis-network div.vis-edit-mode div.vis-button{
-    float: none;
-    position: relative;
-    /*font-size: 12px;*/
-    /*-moz-border-radius: 15px;*/
-    /*border-radius: 15px;*/
-    /*display: inline-block;*/
-    /*background-position: 0 0;*/
-    /*background-repeat: no-repeat;*/
-    /*height: 24px;*/
-    /*margin-left: 10px;*/
-    /*cursor: pointer;*/
-    /*padding: 0 8px 0 8px;*/
+@media screen and (min-width: 64em) {
+    .menu-icon{
+        display: none;
+    }
 }

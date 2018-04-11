@@ -1,8 +1,7 @@
 $(document).foundation();
 
 $(document).ready(function(){
-   document.getElementById("exportForm").onsubmit = exportNetwork;
-   document.getElementById("importForm").onsubmit = importNetwork;
+   document.getElementById("saveButton").onclick = exportNetwork;
 
    importNetwork();
 });
