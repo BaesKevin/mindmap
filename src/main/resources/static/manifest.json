@@ -1,0 +1,21 @@
+{
+    "dir": "ltr",
+    "lang": "en",
+    "name": "Foundation Kitchensink",
+    "scope": "/",
+    "display": "browser",
+    "start_url": "http://localhost:8080/",
+    "short_name": "Foundation Kitc",
+    "theme_color": "transparent",
+    "description": "",
+    "orientation": "any",
+    "background_color": "transparent",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "/images/favicon.ico",
+            "sizes": "16x13"
+        }
+    ]
+}
