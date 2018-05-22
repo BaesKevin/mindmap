@@ -3,6 +3,7 @@ package be.howest.kevin.mindmap.models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+// TODO fix update bug: the node is not updated if only the coordinates changed
 @Entity
 public class Node {
 	@Id

@@ -8,6 +8,8 @@ function updateOnlineStatus(event) {
     var condition = navigator.onLine ? "online" : "offline";
 
     document.getElementById("networkstatus").innerHTML = condition;
-
-    console.log("Device network status: " + navigator.onLine);
+    
+    if(condition === "online"){
+    	console.log("we're back online, time to sync");
+    }
 }
