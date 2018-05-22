@@ -1,7 +1,7 @@
 const url = "/mindmap/names";
 
 function getNetworkNames(){
-	return fetch(url).then(response => response.json());
+	return fetch(url, {credentials: 'same-origin'}).then(response => response.json());
 }
 
 function init(){

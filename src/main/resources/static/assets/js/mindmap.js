@@ -253,7 +253,9 @@ function loadNetworkFromStorage(networkName){
 }
 
 function loadNetworkFromserver(name){
-	return fetch("mindmap/" + name)
+	return fetch("mindmap/" + name, {
+        credentials: 'same-origin'
+	})
     .then(response => response.json())
     .then(json => {
     	let loaded_network_data = {

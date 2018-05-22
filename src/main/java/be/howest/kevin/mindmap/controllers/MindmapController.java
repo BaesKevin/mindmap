@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class MindmapController {
 	@Autowired
 	private MindMapRepository mmRepo;
 	
+	@CrossOrigin
 	@RequestMapping("/mindmap/names")
 	List<String> getMindMapNames() {
 		Iterable<MindMap> fromDb = mmRepo.findAll();
@@ -33,6 +35,7 @@ public class MindmapController {
 		return names;
 	}
 	
+	@CrossOrigin
 	@RequestMapping("/mindmap/{id}")
 	MindMap getMindMap(@PathVariable String id) {
 		// TODO validation
@@ -45,6 +48,7 @@ public class MindmapController {
 		return null;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value="/savemindmap", method=RequestMethod.POST)
 	void saveMindMap(@RequestBody MindMap map) {
 		try {
@@ -60,6 +64,7 @@ public class MindmapController {
 		}
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value="/createmindmap", method=RequestMethod.POST)
 	void createMindMap(String mindmap_name, HttpServletResponse response) {
 		try {
