@@ -26,7 +26,7 @@ public class MindmapController {
 	List<String> getMindMapNames(Principal principal) {
 		Iterable<MindMap> fromDb = mmRepo.findAll();
 		List<String> names = new ArrayList<>();
-		System.out.println(principal.getName());
+
 		for(MindMap m : fromDb) {
 			if(m.getUsername().equals(principal.getName())) {
 				names.add(m.getName());
@@ -73,7 +73,6 @@ public class MindmapController {
 	@RequestMapping(value="/createmindmap", method=RequestMethod.POST)
 	void createMindMap(String mindmap_name, HttpServletResponse response, Principal principal) {
 		String username = principal.getName();
-		System.out.println("username: " + username);
 		
 		try {
 			if(mindmap_name != null && !mindmap_name.trim().equals("") && mindmap_name.length() < 100) {

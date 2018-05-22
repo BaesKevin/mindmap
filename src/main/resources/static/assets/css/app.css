@@ -3,52 +3,52 @@
 }
 
 .off-canvas-content{
-    /*display:flex;
-    flex-flow: column;*/
-    height:100vh;
+    height:100%;
+}
+
+.topcontainer{
+	height: 100vh;
 }
 
 
-.title-bar{
-    height: 6vh;
-   /*flex: 0 1 auto;*/
+
+.mindmap-listitem{
+	display: block;
+	color: vertical-align: middle;
+    margin: 0 0 1rem 0;
+    font-family: inherit;
+    padding: 0.85em 1em;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    border-radius: 0;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
+    font-size: 0.9rem;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: #1779ba;
+    color: #fefefe;
+  	margin-bottom: 10px;
 }
 
-@media print, screen and (min-width: 40em)
-h1, .h1 {
-    font-size: 2rem;
+.mindmap-listitem:hover{
+	background-color: #14679e;
+	color: #fff;
 }
 
 .mindmapcontainer{
-    position: relative;
-    height: 94vh;
+    height: 85vh;
 }
 
+
 #mynetwork {
-    height: 94vh;
+    height: 85vh;
 }
 
 
 .hidden{
     display: none;
 }
-
-#network-popUp{
-     /*now the left edge is centered*/
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    height: 100px;
-}
-
-#network-popUp div{
-    position: relative;
-    left: -50%;
-    top: -50%;
-    background-color: yellow;
-    border: 2px solid blue;
-}
-
 
 
 /*using foundation breakpoints https://foundation.zurb.com/sites/docs/media-queries.html*/
@@ -57,10 +57,9 @@ h1, .h1 {
         display: none;
     }
 }
-
+/*
 @media screen and (max-width: 64em) {
 	
-    /*overriding visjs manipulation toolbar properties*/
 	div.vis-network div.vis-edit-mode div.vis-button.vis-edit, div.vis-network div.vis-manipulation div.vis-button.vis-edit{
 		background-position: left center;
 	}
@@ -87,8 +86,9 @@ h1, .h1 {
 	}
 }
 
+*/
 
-/*navigation button positions and sizes*/
+/*navigation button positions and sizes
 @media screen and (max-width: 40em) {
 	
 	
@@ -123,3 +123,4 @@ h1, .h1 {
 	    right: 90px;
 	}
 }
+*/

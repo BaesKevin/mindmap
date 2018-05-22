@@ -33,7 +33,8 @@ function initNetwork(data){
 }
 
 function initOrUpdateNetwork(data){
-	// update the global nodes and edges no matter what, these are used by the exportNetworkToStorage function
+	// update the global nodes and edges no matter what, these are used by the
+	// exportNetworkToStorage function
 	nodes = data.nodes;
 	edges = data.edges;
 	if(network !== undefined){
@@ -60,7 +61,8 @@ function serverMatchesStorage(dataFromServer, dataFromStorage){
 }
 
 // first check if there are an equal amount of nodes and edges
-// then check each property of a node from storage against the matching property of a node from the server
+// then check each property of a node from storage against the matching property
+// of a node from the server
 function areNetworksEqual(oldData, newData){
 	if(oldData.nodes.length !== newData.nodes.length || oldData.edges.length !== newData.edges.length){
 		return false;
@@ -85,7 +87,7 @@ function areNetworksEqual(oldData, newData){
 				if(isNumeric(oldNode[key])){
 					let numbersAreCloseEngough = Math.floor(oldVal) === Math.floor(newVal);
 
-					if(!numbersAreCloseEnough){
+					if(!numbersAreCloseEngough){
 						areEqual = false;
 					}
 				} else {
@@ -113,36 +115,27 @@ function areNetworksEqual(oldData, newData){
 }
 
 function editNode(data, callback) {
-    document.getElementById('operation').innerHTML = "Edit Node";
-    document.getElementById('node-label').value = data.label;
-    document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
-    document.getElementById('cancelButton').onclick = cancelEdit.bind(this,callback);
-
-    let networkPopup = document.getElementById('network-popUp');
-    networkPopup.className = "";
-    let labelInput = document.querySelector("input#node-label");
-    labelInput.setSelectionRange(0, labelInput.value.length);
+	let editNodeModal = $('#editNodeModal');
+	
+	editNodeModal.find("#new_node_text").val(data.label);
+	editNodeModal.find('#btn_confirm_edit')[0].onclick = saveData.bind(this, data, callback);
+	editNodeModal.find('.close-button')[0].onclick = cancelEdit.bind(this,callback);
+	
+	editNodeModal.foundation('open');
 }
 
 function saveData(data,callback) {
-    data.label = document.getElementById('node-label').value;
-    clearPopUp();
+    data.label = $('#new_node_text').val();
+    $('#editNodeModal').foundation('close');
     callback(data);
 }
 
-function clearPopUp() {
-    document.getElementById('saveButton').onclick = null;
-    document.getElementById('cancelButton').onclick = null;
-    document.getElementById('network-popUp').className = "hidden";
-}
-
 function cancelEdit(callback) {
-    clearPopUp();
     callback(null);
 }
 
 function exportNetwork(e) {
-    e.preventDefault();
+	if(e) e.preventDefault();
 
     let networkName = getQueryStringParam('name');
     let exportData = {
@@ -156,7 +149,6 @@ function exportNetwork(e) {
     exportNetworkToStorage(exportData);
     exportNetworkToServer(exportData).then(_ => {
     	$('[data-toggle="offCanvas"]').click();
-    	alert("OK");;
     });
 }
 
@@ -199,8 +191,10 @@ function exportNetworkToServer(data){
     	});
 }
 
-// load the network from storage and server, check if they match, overwrite server with localstorage
-// TODO give the user a choice to overwrite server with localstorage or vice versa,
+// load the network from storage and server, check if they match, overwrite
+// server with localstorage
+// TODO give the user a choice to overwrite server with localstorage or vice
+// versa,
 // useful when the user worked in a different browser or on a different device
 function importNetwork(e) {
     if(e){
@@ -231,31 +225,46 @@ function importNetwork(e) {
     
 }
 
-// if the user wants to keep their local changes, push local changes to the server and init the network with local data
-// else pull the remote changes, update local storage and load the network with remote changes
+// if the user wants to keep their local changes, push local changes to the
+// server and init the network with local data
+// else pull the remote changes, update local storage and load the network with
+// remote changes
 function syncBasedOnUsersChoice(dataFromStorage, dataFromServer){
 	console.log("Server is not in sync: sync data");
 	
-	let networkName = getQueryStringParam('name');
-    let exportData = {
-        name: networkName,
-        nodes: dataFromServer.nodes.get(),
-        edges: dataFromServer.edges.get()
-    };
-    
-    let choice = askForSyncStrategy();
-    
-    if(choice === "overwriteServer"){
-    	exportNetworkToServer(exportData);
+	let syncStrategyModal =  $('#chooseSyncStrategyModal')
+	
+	syncStrategyModal.find('[data-sync-strategy="overwriteServer"]').one('click', function(e){
+		e.preventDefault();
+		
+		let networkName = getQueryStringParam('name');
+	    let exportData = {
+	        name: networkName,
+	        nodes: dataFromStorage.nodes.get(),
+	        edges: dataFromStorage.edges.get()
+	    };
+		
+		exportNetworkToServer(exportData).then(_ => console.log("sync successful"));
     	initOrUpdateNetwork(dataFromStorage);
-    } else if (choice === "overwriteStorage" ){
+    	syncStrategyModal.foundation("close");
+	});
+	
+	syncStrategyModal.find('[data-sync-strategy="overwriteStorage"]').one('click', function(e){
+		e.preventDefault();
+		
+		let networkName = getQueryStringParam('name');
+	    let exportData = {
+	        name: networkName,
+	        nodes: dataFromServer.nodes.get(),
+	        edges: dataFromServer.edges.get()
+	    };
+		
     	exportNetworkToStorage(exportData);
     	initOrUpdateNetwork(dataFromServer);
-    }
-}
-
-function askForSyncStrategy(){
-	return "overwriteServer";
+    	syncStrategyModal.foundation("close");
+	});
+	
+	syncStrategyModal.foundation('open');
 }
 
 function loadNetworkFromStorage(networkName){
@@ -315,3 +324,10 @@ function createDataFromNetworkFromStorage(networkFromStorage){
     };
 }
 
+
+function saveAndGoHome(e){
+	e.preventDefault();
+	
+	exportNetwork();
+	location.href="/";
+}

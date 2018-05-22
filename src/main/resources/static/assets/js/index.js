@@ -10,16 +10,16 @@ function init(){
 		let networkNamesListContainer = $('#networkList');
 		
 		if(names.length > 0){
-			let list = "<ul>"; 
+			let list = "<div class='cell large-4 large-offset-4 small-8 small-offset-2'><ul  class='no-bullet'>"; 
 			names.forEach(name => {
-				list += `<li><a href="/mindmap.html?name=${name}">${name}</a></li>`;
+				list += `<li ><a class='mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a></li>`;
 			})
 			
-			list += "</ul>";
+			list += "</ul></div>";
 			
 			networkNamesListContainer.html(list);
 		} else {
-			networkNamesListContainer.html("You don't have any networks yet, try creating one by using the text field above.");
+			networkNamesListContainer.children('span').text("You don't have any networks yet, try creating one by entering a name in the text field above.");
 		}
 		
 	}).catch(error=> {console.info("couldn't get network names"); throw error;});

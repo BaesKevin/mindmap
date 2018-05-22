@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="assets/css/foundation/foundation.css">
+<link rel="stylesheet" href="assets/css/app.css">
 <title>Mindmapper</title>
 <link rel="manifest" href="manifest.json" />
 </head>
@@ -16,7 +17,7 @@
 	<main>
 		<form id="form_create_mindmap" action="/createmindmap" method="POST" class="callout primary">
 			<div class="grid-x">
-				<div class="small-4 cell small-offset-3">
+				<div class="small-5 cell small-offset-3">
 					<input type="text" id="create_mindmap" name="mindmap_name"
 						placeholder="My mindmap" >
 				</div>
@@ -29,8 +30,8 @@
 		</form>
 		
 			
-		<div id="networkList">
-			Loading networks...
+		<div id="networkList" class="grid-x">
+			<span class="cell large-4 large-offset-4 small-8 small-offset-2">Loading networks...</span>
 		</div>
 		
 	</main>

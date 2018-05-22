@@ -1,67 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="assets/css/foundation/foundation.css">
-    <title>Mindmapper</title>
-    <link rel="stylesheet" href="assets/css/vis-network.min.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="manifest" href="manifest.json" />
+<meta charset="UTF-8">
+<meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    
+<link rel="stylesheet" href="assets/css/foundation/foundation.css">
+<title>Mindmapper</title>
+<link rel="stylesheet" href="assets/css/vis-network.min.css">
+<link rel="stylesheet" href="assets/css/app.css">
+<link rel="manifest" href="manifest.json" />
 </head>
 <body>
-<div class="grid-x">
+	<div class="grid-x topcontainer">
 
-    <div class="off-canvas position-left reveal-for-large " id="offCanvas" data-off-canvas data-transition='overlap'>
+		<div class="off-canvas position-left reveal-for-large " id="offCanvas"
+			data-off-canvas data-transition='overlap'>
 
-        <!-- Close button -->
-        <button class="close-button" aria-label="Close menu" type="button" data-toggle="offCanvas">
-            <span aria-hidden="true">&times;</span>
-        </button>
+			<!-- Close button -->
+			<button class="close-button" aria-label="Close menu" type="button"
+				data-toggle="offCanvas">
+				<span aria-hidden="true">&times;</span>
+			</button>
 
-        <!-- Menu -->
-        <ul class="vertical menu">
-            <li><a href="#" id="exportButton">Save</a></li>
-            <li id="networkstatus"></li>
-        </ul>
-    </div>
+			<!-- Menu -->
+			<ul class="vertical menu">
+				<li><a href="#" data-open="goHomeModal">Home</a></li>
+				<li><a href="#" id="exportButton">Save</a></li>
+				<li id="networkstatus"></li>
+			</ul>
+		</div>
 
-    <div class="off-canvas-content cell auto " data-off-canvas-content>
-            <header class="title-bar">
-                <div class="title-bar-left">
-                    <button class="menu-icon" type="button" data-open="offCanvas"></button>
-                    <h1 class="title-bar-title">Mind maps</h1>
-                </div>
-            </header>
-            <!-- Your page content lives here -->
+		<div class="off-canvas-content cell auto " data-off-canvas-content>
+			<div class='grid-y'>
+				<header class="title-bar">
+					<div class="title-bar-left">
+						<button class="menu-icon" type="button" data-open="offCanvas"></button>
+						<h1 class="title-bar-title">Mind maps</h1>
+					</div>
+				</header>
+				<!-- Your page content lives here -->
 
-            <div class="mindmapcontainer">
-                <div id="mynetwork"></div>
-                <div id="network-popUp" class="hidden">
-                    <div>
-                        <span id="operation">Add Node</span> <br>
-                        <table style="margin:auto;"><tbody>
+				<div class="mindmapcontainer">
+					<div id="mynetwork"></div>
+				</div>
+			</div>
+		</div>
 
-                        <tr>
-                            <td>label</td><td><input id="node-label" value="new value"></td>
-                        </tr></tbody></table>
-                        <input type="button" value="save" id="saveButton">
-                        <input type="button" value="cancel" id="cancelButton">
-                    </div>
-                </div>
-            </div>
-        </div>
-</div>
+	</div>
 
-<script src="assets/js/registerSw.js"></script>
-<script src="assets/js/localforage.min.js"></script>
-<script src="assets/js/foundation/jquery.js"></script>
-<script src="assets/js/foundation/what-input.js"></script>
-<script src="assets/js/foundation/foundation.min.js"></script>
-<script src="assets/js/vis.js"></script>
+	<div class="reveal" id="goHomeModal" data-reveal>
+		<h3>Save changes and leave?</h3>
+		<p>You will not lose any work by leaving this page.</p>
+		<button class="close-button" data-close aria-label="Close modal"
+			type="button">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<button type="button" class='button' id='saveAndQuitButton'>Save
+			and quit</button>
+	</div>
 
-<script src="assets/js/mindmap.js"></script>
-<script src="assets/js/syncmindmap.js"></script>
-<script src="assets/js/util.js"></script>
-<script src="assets/js/app.js"></script>
+	<div class="reveal" id="editNodeModal" data-reveal>
+		<h3>Enter text</h3>
+
+			<div class="grid-x">
+				<div class="small-5 cell small-offset-3">
+					<input type="text" id="new_node_text" name="new_node_text"/>
+				</div>
+				<div class="small-2 cell input-group">
+					<div class="input-group-button">
+						<button class="button" id="btn_confirm_edit">Confirm</button>
+					</div>
+				</div>
+			</div>
+
+		<button class="close-button" data-close aria-label="Close modal"
+			type="button">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	
+	<div class="reveal" id="chooseSyncStrategyModal" data-reveal data-close-on-click="false">
+		<h3>Data doesn't match</h3>
+		<p>
+			we've detected that the data on your computer and the data on the server do not match.
+			You can either keep the data on your computer or the data on the server, one of both will be lost.
+		</p>
+		
+		<button class='button'
+			type="button"
+			data-sync-strategy='overwriteServer'>
+			Keep data on my machine
+			
+		</button>
+			
+		<button class='button'
+			type="button"
+			data-sync-strategy='overwriteStorage'>
+			Keep data on the server
+		</button>
+
+
+	</div>
+
+	<script src="assets/js/registerSw.js"></script>
+	<script src="assets/js/localforage.min.js"></script>
+	<script src="assets/js/foundation/jquery.js"></script>
+	<script src="assets/js/foundation/what-input.js"></script>
+	<script src="assets/js/foundation/foundation.min.js"></script>
+	<script src="assets/js/vis.js"></script>
+
+	<script src="assets/js/mindmap.js"></script>
+	<script src="assets/js/syncmindmap.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/app.js"></script>
 </body>
 </html>
