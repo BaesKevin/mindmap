@@ -76,8 +76,21 @@ function areNetworksEqual(oldData, newData){
 		}
 		
 		for(key in oldNode){
-			if(!(oldNode.hasOwnProperty(key) && oldNode[key] === newNode[key])){
-				areEqual = false;
+			let oldVal = oldNode[key];
+			let newVal = newNode[key];
+			
+			if(!(oldNode.hasOwnProperty(key) && oldVal === newVal)){
+				
+				// account for precision error on floats
+				if(isNumeric(oldNode[key])){
+					let numbersAreCloseEngough = Math.floor(oldVal) === Math.floor(newVal);
+
+					if(!numbersAreCloseEnough){
+						areEqual = false;
+					}
+				} else {
+					areEqual = false;
+				}
 			}
 		}
 	});
