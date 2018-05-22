@@ -3,11 +3,7 @@ let network;
 let data;
 let nodes;
 let edges;
-
-function initNetwork(data){
-    let container = document.getElementById('mynetwork');
-
-    let options = {
+let visNetworkOptions = {
         interaction:{hover:true},
         manipulation: {
             enabled: true,
@@ -28,8 +24,24 @@ function initNetwork(data){
         	navigationButtons: true	
         }
     };
-    network = new vis.Network(container, data, options);
 
+
+function initNetwork(data){
+    let container = document.getElementById('mynetwork');
+    network = new vis.Network(container, data, visNetworkOptions);
+
+}
+
+function initOrUpdateNetwork(data){
+	// update the global nodes and edges no matter what
+	nodes = data.nodes;
+	edges = data.edges;
+	if(network !== undefined){
+		console.info("updating network");
+		network.setData({nodes: data.nodes, edges: data.edges});
+	} else {
+		initNetwork(data);
+	}
 }
 
 function editNode(data, callback) {
@@ -64,17 +76,38 @@ function cancelEdit(callback) {
 function exportNetwork(e) {
     e.preventDefault();
 
+    let networkName = getQueryStringParam('name');
     let exportData = {
-        name: "newname",
+        name: networkName,
         nodes: nodes.get(),
         edges: edges.get()
     };
+    
+    console.log("export data");
+    console.log(exportData);
 
-    localforage
-        .setItem('network', JSON.stringify(exportData))
-        .catch(console.error);
+    exportNetworkToStorage(exportData);
+    exportNetworkToServer(exportData);
+}
 
-    postData("/savemindmap", exportData);
+function exportNetworkToStorage(data){
+	localforage
+	    .setItem(data.name, JSON.stringify(data))
+	    .catch(error => console.info("LocalForage couldn't save network " + networkName));
+}
+
+function exportNetworkToServer(data){
+
+    postData("/savemindmap", data)
+    	.then(response => {
+    			$('[data-toggle="offCanvas"]').click();
+    			alert("OK");
+    			return response.text();
+    		}
+    	)
+    	.catch(error => {
+			console.info("couldn't save network to server"); throw error;
+    	});
 }
 
 function importNetwork(e) {
@@ -82,30 +115,76 @@ function importNetwork(e) {
         e.preventDefault();
     }
 
-    localforage.getItem('network')
-        .then( networkFromStorage => {
-            if(networkFromStorage !== null){
-                let networkData = JSON.parse(networkFromStorage);
-                nodes = new vis.DataSet(networkData.nodes);
-                edges = new vis.DataSet(networkData.edges);
+    let networkName = getQueryStringParam('name');
 
-            } else {
-                nodes = new vis.DataSet();
-                edges = new vis.DataSet();
-            }
-
-            data = {
-                nodes: nodes ,
-                edges: edges
-            };
-
-            initNetwork(data);
-        })
-        .catch(console.error);
-
-//    fetch("mindmap/somename")
-//        .then(response => response.json())
-//        .then(json => console.log(json))
-//        .catch(console.error);
-
+    if(!networkName){
+    	location.href = "/";
+    }
+    
+    loadNetworkFromStorage(networkName);
+    loadNetworkFromserver(networkName);
 }
+
+function loadNetworkFromStorage(networkName){
+	getNetworkFromStorage(networkName)
+	.then(data => {
+		console.log("from storage: ");
+		console.log(data);
+		
+		// this should always be faster than the call to the network, on localhost it isn't for some reason
+		if(network === undefined){
+    		initNetwork(data);
+		}
+	});
+}
+
+function loadNetworkFromserver(name){
+	fetch("mindmap/" + name)
+    .then(response => response.json())
+    .then(json => {
+    	let loaded_network_data = {
+    		name: json.name,
+    		nodes: new vis.DataSet(json.nodes),
+    		edges: new vis.DataSet(json.edges)
+    	}
+    	
+    	console.log("from network");
+    	console.log(loaded_network_data);
+    	initOrUpdateNetwork(loaded_network_data);
+    })
+    .catch(error => {
+    	console.info("network not found on server");
+    	console.log(error);
+    });
+    
+}
+
+function getNetworkFromStorage(name){
+	return localforage.getItem(name)
+    .then( networkFromStorage => {
+    	
+    	return createDataFromNetworkFromStorage(networkFromStorage);
+    })
+    .catch(error => console.info("network not found in storage"));
+}
+
+function createDataFromNetworkFromStorage(networkFromStorage){
+	let newnodes, newedges;
+	
+	if(networkFromStorage !== null){
+        let networkData = JSON.parse(networkFromStorage);
+        newnodes = new vis.DataSet(networkData.nodes);
+        newedges = new vis.DataSet(networkData.edges);
+
+    } else {
+    	newnodes = new vis.DataSet();
+    	newedges = new vis.DataSet();
+    }
+
+	return {
+    	name: name,
+        nodes: newnodes ,
+        edges: newedges
+    };
+}
+

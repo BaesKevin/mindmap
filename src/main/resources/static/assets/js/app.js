@@ -5,5 +5,6 @@ $(document).ready(function(){
 
    addOnlineOfflineEventListeners();
    importNetwork();
+   
 });
 

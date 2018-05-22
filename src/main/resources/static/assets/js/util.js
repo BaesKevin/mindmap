@@ -10,5 +10,10 @@ function postData(url, data) {
         },
         method: 'POST'
     })
-    .then(response => response.text())
+}
+
+function getQueryStringParam(name){
+	let urlParams = new URLSearchParams(window.location.search);
+	
+	return urlParams.get(name);
 }

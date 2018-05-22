@@ -1,6 +1,10 @@
 package be.howest.kevin.mindmap.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +21,17 @@ public class MindmapController {
 	@Autowired
 	private MindMapRepository mmRepo;
 	
+	@RequestMapping("/mindmap/names")
+	List<String> getMindMapNames() {
+		Iterable<MindMap> fromDb = mmRepo.findAll();
+		List<String> names = new ArrayList<>();
+		
+		for(MindMap m : fromDb) {
+			names.add(m.getName());
+		}
+		
+		return names;
+	}
 	
 	@RequestMapping("/mindmap/{id}")
 	MindMap getMindMap(@PathVariable String id) {
@@ -43,7 +58,22 @@ public class MindmapController {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		
-		
+	}
+	
+	@RequestMapping(value="/createmindmap", method=RequestMethod.POST)
+	void createMindMap(String mindmap_name, HttpServletResponse response) {
+		try {
+			if(mindmap_name != null && !mindmap_name.trim().equals("") && mindmap_name.length() < 100) {
+				MindMap newMap = new MindMap(mindmap_name);
+				mmRepo.save(newMap);
+				
+				response.sendRedirect("/mindmap.html?name=" + newMap.getName());
+			} else {
+				response.sendRedirect("/index.html?error=Please use a valid name under 100 characters");
+			}
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
