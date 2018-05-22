@@ -19,6 +19,7 @@ public class MindMap {
 	@OneToMany(cascade = CascadeType.ALL, 
 	        orphanRemoval = true)
 	List<Edge> edges;
+	private String username;
 	
 	private MindMap() {
 
@@ -26,9 +27,10 @@ public class MindMap {
 		edges = new ArrayList<>();
 	}
 	
-	public MindMap(String name) {
+	public MindMap(String name, String username) {
 		this();
 		this.name = name;
+		this.username = username;
 	}
 
 	public String getName() {
@@ -53,6 +55,14 @@ public class MindMap {
 
 	public void setEdges(List<Edge> edges) {
 		this.edges = edges;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	

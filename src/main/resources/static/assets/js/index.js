@@ -25,6 +25,9 @@ function init(){
 	}).catch(error=> {console.info("couldn't get network names"); throw error;});
 }
 
+function getLoggedInUser(){
+	fetch('/user', { credentials: 'same-origin'}).then(response => response.json()).then(console.log);
+}
 
 $(document).ready(function(){
 	init();
