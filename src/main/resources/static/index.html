@@ -11,7 +11,7 @@
 <body>
 <div class="grid-x">
 
-    <div class="off-canvas position-left reveal-for-large" id="offCanvas" data-off-canvas>
+    <div class="off-canvas position-left reveal-for-large " id="offCanvas" data-off-canvas data-transition='overlap'>
 
         <!-- Close button -->
         <button class="close-button" aria-label="Close menu" type="button" data-toggle="offCanvas">
@@ -20,11 +20,12 @@
 
         <!-- Menu -->
         <ul class="vertical menu">
-            <li><a href="#" id="saveButton">Save</a></li>
+            <li><a href="#" id="exportButton">Save</a></li>
+            <li id="networkstatus"></li>
         </ul>
     </div>
 
-    <div class="off-canvas-content cell auto" data-off-canvas-content>
+    <div class="off-canvas-content cell auto " data-off-canvas-content>
             <header class="title-bar">
                 <div class="title-bar-left">
                     <button class="menu-icon" type="button" data-open="offCanvas"></button>
@@ -57,6 +58,10 @@
 <script src="assets/js/foundation/what-input.js"></script>
 <script src="assets/js/foundation/foundation.min.js"></script>
 <script src="assets/js/vis.js"></script>
+
+<script src="assets/js/mindmap.js"></script>
+<script src="assets/js/syncmindmap.js"></script>
+<script src="assets/js/util.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -3,21 +3,31 @@
 }
 
 .off-canvas-content{
-    display:flex;
-    flex-flow: column;
+    /*display:flex;
+    flex-flow: column;*/
     height:100vh;
 }
 
+
 .title-bar{
-    flex: 0 1 auto;
+    height: 6vh;
+   /*flex: 0 1 auto;*/
+}
+
+@media print, screen and (min-width: 40em)
+h1, .h1 {
+    font-size: 2rem;
 }
 
 .mindmapcontainer{
     position: relative;
-    flex: 1 1 auto;    /*width: 60vw;*/
-    /*height: 100vh;*/
-    display: flex;
+    height: 94vh;
 }
+
+#mynetwork {
+    height: 94vh;
+}
+
 
 .hidden{
     display: none;
@@ -41,14 +51,75 @@
 
 
 
-#mynetwork {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: auto;
-}
-
+/*using foundation breakpoints https://foundation.zurb.com/sites/docs/media-queries.html*/
 @media screen and (min-width: 64em) {
     .menu-icon{
         display: none;
     }
+}
+
+@media screen and (max-width: 64em) {
+	
+    /*overriding visjs manipulation toolbar properties*/
+	div.vis-network div.vis-edit-mode div.vis-button.vis-edit, div.vis-network div.vis-manipulation div.vis-button.vis-edit{
+		background-position: left center;
+	}
+	
+	div.vis-network div.vis-edit-mode div.vis-button, div.vis-network div.vis-manipulation div.vis-button{
+		font-size: 30px;
+		height: 50px;
+	}
+	
+	div.vis-network div.vis-edit-mode div.vis-label, div.vis-network div.vis-manipulation div.vis-label{
+		line-height: 50px;
+	}
+	
+	div.vis-network div.vis-manipulation{
+		height: auto;
+	}
+	
+	div.vis-network div.vis-manipulation div.vis-button{
+		background-position: left center;
+	}
+	
+	div.vis-network div.vis-manipulation div.vis-separator-line{
+		height: 46px;
+	}
+}
+
+
+/*navigation button positions and sizes*/
+@media screen and (max-width: 40em) {
+	
+	
+	div.vis-network div.vis-navigation div.vis-button{
+	    width: 80px;
+	   	height: 80px;
+	    background-size: 75px;
+	}
+	
+	div.vis-network div.vis-navigation div.vis-button.vis-down {
+	    bottom: 10px;
+	    left: 90px;
+	}
+	
+	div.vis-network div.vis-navigation div.vis-button.vis-up {
+	    bottom: 85px;
+	    left: 90px;
+	}
+	
+	div.vis-network div.vis-navigation div.vis-button.vis-right {
+	    bottom: 10px;
+	    left: 165px;
+	}
+	
+	div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
+	    bottom: 85px;
+	    right: 15px;
+	}
+	
+	div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
+	    bottom: 10px;
+	    right: 90px;
+	}
 }

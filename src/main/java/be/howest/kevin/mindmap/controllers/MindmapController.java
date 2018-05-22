@@ -30,16 +30,20 @@ public class MindmapController {
 		return null;
 	}
 	
-	@RequestMapping(value="/mindmap", method=RequestMethod.POST)
-	void postMindMap(@RequestBody MindMap map) {
+	@RequestMapping(value="/savemindmap", method=RequestMethod.POST)
+	void saveMindMap(@RequestBody MindMap map) {
 		try {
+			Optional<MindMap> existing = mmRepo.findById(map.getName());
+			
+			if(map != null) {
+				mmRepo.save(map);
+			}
 			// TODO validation
-			mmRepo.save(map);
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		
 		
 	}
-	
 }
