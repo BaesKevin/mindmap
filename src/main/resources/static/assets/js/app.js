@@ -4,6 +4,7 @@ $(document).ready(function(){
    document.getElementById("exportButton").onclick = exportNetwork;
    document.getElementById("saveAndQuitButton").onclick = saveAndGoHome;
 
+   createNetwork();
    addOnlineOfflineEventListeners();
    importNetwork();
    

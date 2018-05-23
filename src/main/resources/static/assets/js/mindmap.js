@@ -1,48 +1,9 @@
-
 let network;
-let data;
-let nodes;
-let edges;
-let visNetworkOptions = {
-        interaction:{hover:true},
-        manipulation: {
-            enabled: true,
-            editNode: editNode
-        },
-        edges: {
-            arrows: 'to',
-            smooth: {
-                type: "cubicBezier",
-                forceDirection: "none",
-                roundness: 1
-            }
-        },
-        physics: {
-            enabled: false
-        },
-        interaction: {
-        	navigationButtons: true	
-        }
-    };
 
 
-function initNetwork(data){
-    let container = document.getElementById('mynetwork');
-    network = new vis.Network(container, data, visNetworkOptions);
-
-}
-
-function initOrUpdateNetwork(data){
-	// update the global nodes and edges no matter what, these are used by the
-	// exportNetworkToStorage function
-	nodes = data.nodes;
-	edges = data.edges;
-	if(network !== undefined){
-		console.info("updating network");
-		network.setData({nodes: data.nodes, edges: data.edges});
-	} else {
-		initNetwork(data);
-	}
+function createNetwork(){
+	let container = document.getElementById('mynetwork');
+	network = new VisNetwork(container, new VisNetworkData());
 }
 
 function serverMatchesStorage(dataFromServer, dataFromStorage){
@@ -114,37 +75,12 @@ function areNetworksEqual(oldData, newData){
 	return areEqual;
 }
 
-function editNode(data, callback) {
-	let editNodeModal = $('#editNodeModal');
-	
-	editNodeModal.find("#new_node_text").val(data.label);
-	editNodeModal.find('#btn_confirm_edit')[0].onclick = saveData.bind(this, data, callback);
-	editNodeModal.find('.close-button')[0].onclick = cancelEdit.bind(this,callback);
-	
-	editNodeModal.foundation('open');
-}
-
-function saveData(data,callback) {
-    data.label = $('#new_node_text').val();
-    $('#editNodeModal').foundation('close');
-    callback(data);
-}
-
-function cancelEdit(callback) {
-    callback(null);
-}
 
 function exportNetwork(e) {
 	if(e) e.preventDefault();
 
     let networkName = getQueryStringParam('name');
-    let exportData = {
-        name: networkName,
-        nodes: nodes.get(),
-        edges: edges.get()
-    };
-    
-    exportData = convertToNetworkDataWithoutBloatProperties(exportData);
+	let exportData = new NetworkExportData(networkName, network.networkData);
     
     exportNetworkToStorage(exportData);
     exportNetworkToServer(exportData).then(_ => {
@@ -152,26 +88,7 @@ function exportNetwork(e) {
     });
 }
 
-function convertToNetworkDataWithoutBloatProperties(data){
-	let cleanData = {
-		name: data.name,
-		nodes: [],
-		edges: data.edges
-	};
-	
-	data.nodes.forEach(node => {
-		let cleanNode = {
-			id: node.id,
-			label: node.label,
-			x: node.x,
-			y: node.y
-		}
-		
-		cleanData.nodes.push(cleanNode);
-	});
-	
-	return cleanData;
-}
+
 
 function exportNetworkToStorage(data){
 	localforage
@@ -216,7 +133,7 @@ function importNetwork(e) {
     			if(!isServerSynced){
     				syncBasedOnUsersChoice(dataFromStorage, dataFromServer);
     			} else {
-        	    	initOrUpdateNetwork(dataFromServer);
+        	    	network.initOrUpdateNetwork(dataFromServer);
     			}
 
     		});
@@ -245,7 +162,7 @@ function syncBasedOnUsersChoice(dataFromStorage, dataFromServer){
 	    };
 		
 		exportNetworkToServer(exportData).then(_ => console.log("sync successful"));
-    	initOrUpdateNetwork(dataFromStorage);
+    	network.initOrUpdateNetwork(dataFromStorage);
     	syncStrategyModal.foundation("close");
 	});
 	
@@ -260,7 +177,7 @@ function syncBasedOnUsersChoice(dataFromStorage, dataFromServer){
 	    };
 		
     	exportNetworkToStorage(exportData);
-    	initOrUpdateNetwork(dataFromServer);
+    	network.initOrUpdateNetwork(dataFromServer);
     	syncStrategyModal.foundation("close");
 	});
 	
