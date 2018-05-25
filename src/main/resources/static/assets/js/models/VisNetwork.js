@@ -15,7 +15,7 @@ let VisNetwork = (function () {
     function changeNodeOnEnter(e){
         let code = e.keyCode ? e.keyCode : e.which;
         let enterKeyCode = 13;
-        console.log("key  pressed");
+
         if(code === enterKeyCode){
             $('#editNodeModal').find('#btn_confirm_edit').click();
         }
@@ -71,3 +71,4 @@ let VisNetwork = (function () {
     return VisNetwork;
 })();
 
+export default VisNetwork;

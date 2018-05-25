@@ -1,3 +1,8 @@
+import VisNetwork from "./models/VisNetwork.js";
+import VisNetworkData from "./models/VisNetworkData.js";
+import ConnectionStatusModule from "./models/ConnectionStatusModule.js";
+import persistence from "./models/VisNetworkPersistence.js";
+
 $(document).foundation();
 
 $(document).ready(function(){

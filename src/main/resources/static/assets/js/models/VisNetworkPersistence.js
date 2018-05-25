@@ -1,3 +1,5 @@
+import VisNetworkData from "./VisNetworkData.js";
+
 // singleton for the persistence
 const persistence = (function(){
 
@@ -140,3 +142,5 @@ const persistence = (function(){
 
     return new VisNetworkPersistence();
 })();
+
+export default persistence;

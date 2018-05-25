@@ -28,3 +28,5 @@ const ConnectionStatusModule = (function(){
 
     return module;
 })();
+
+export default ConnectionStatusModule;

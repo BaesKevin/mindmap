@@ -26,13 +26,13 @@ VisNetworkData.prototype.equals = function areNetworksEqual(newData){
     // TODO remove duplication
     let areEqual = true;
     this.nodes.get().forEach(function(oldNode){
-        newNode = newData.nodes.get().find(node => node.id == oldNode.id);
+        let newNode = newData.nodes.get().find(node => node.id == oldNode.id);
 
         if(!newNode){
             areEqual = false;
         }
 
-        for(key in oldNode){
+        for(let key in oldNode){
             let oldVal = oldNode[key];
             let newVal = newNode[key];
 
@@ -53,13 +53,13 @@ VisNetworkData.prototype.equals = function areNetworksEqual(newData){
     });
 
     this.edges.get().forEach(function(oldEdge){
-        newEdge = newData.edges.get().find(edge => edge.id == oldEdge.id);
+        let newEdge = newData.edges.get().find(edge => edge.id == oldEdge.id);
 
         if(!newEdge){
             areEqual = false;
         }
 
-        for(key in oldEdge){
+        for(let key in oldEdge){
             if(!(oldEdge.hasOwnProperty(key) && oldEdge[key] === newEdge[key])){
                 areEqual = false;
             }
@@ -88,3 +88,4 @@ function cleanNodes(nodes){
     return new vis.DataSet(cleanNodes);
 }
 
+export default VisNetworkData;
