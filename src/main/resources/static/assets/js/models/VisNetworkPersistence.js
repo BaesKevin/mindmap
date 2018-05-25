@@ -1,12 +1,21 @@
-const persistenceModule = (function(){
+// singleton for the persistence
+const persistence = (function(){
 
-    function exportNetwork(network) {
-        exportNetworkToStorage(network.networkData.getJson());
-        exportNetworkToServer(network.networkData.getJson()).then(_ => {
-            $('[data-toggle="offCanvas"]').click();
-        });
+    function VisNetworkPersistence(network){
+        this.network = network;
     }
 
+    VisNetworkPersistence.prototype.exportNetwork = function() {
+        exportNetworkToStorage(this.network.networkData.getJson());
+        exportNetworkToServer(this.network.networkData.getJson()).then(_ => {
+            $('[data-toggle="offCanvas"]').click();
+        });
+    };
+
+    VisNetworkPersistence.prototype.documentLoaded = function (network) {
+        this.network = network;
+        this.importNetwork(this.network.networkData.name);
+    };
 
 
     function exportNetworkToStorage(data) {
@@ -32,7 +41,7 @@ const persistenceModule = (function(){
 // TODO give the user a choice to overwrite server with localstorage or vice
 // versa,
 // useful when the user worked in a different browser or on a different device
-    function importNetwork(networkName) {
+    VisNetworkPersistence.prototype.importNetwork = function(networkName) {
 
 
         if (!networkName) {
@@ -48,7 +57,7 @@ const persistenceModule = (function(){
                     if (!isServerSynced) {
                         syncBasedOnUsersChoice(storageData, networkData);
                     } else {
-                        network.initOrUpdateNetwork(networkData);
+                        this.network.initOrUpdateNetwork(networkData);
                     }
 
                 });
@@ -70,7 +79,7 @@ const persistenceModule = (function(){
             e.preventDefault();
 
             exportNetworkToServer(dataFromStorage.getJson()).then(_ => console.log("sync successful"));
-            network.initOrUpdateNetwork(dataFromStorage);
+            this.network.initOrUpdateNetwork(dataFromStorage);
             syncStrategyModal.foundation("close");
         });
 
@@ -78,7 +87,7 @@ const persistenceModule = (function(){
             e.preventDefault();
 
             exportNetworkToStorage(dataFromServer.getJson());
-            network.initOrUpdateNetwork(dataFromServer);
+            this.network.initOrUpdateNetwork(dataFromServer);
             syncStrategyModal.foundation("close");
         });
 
@@ -129,7 +138,5 @@ const persistenceModule = (function(){
         return new VisNetworkData(name, newnodes, newedges);
     }
 
-    return {
-        exportNetwork, importNetwork
-    }
+    return new VisNetworkPersistence();
 })();

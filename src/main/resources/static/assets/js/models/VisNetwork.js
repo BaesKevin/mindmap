@@ -2,11 +2,23 @@ let VisNetwork = (function () {
     function editNode(data, callback) {
         let editNodeModal = $('#editNodeModal');
 
-        editNodeModal.find("#new_node_text").val(data.label);
+        editNodeModal
+            .find("#new_node_text")
+            .keyup(changeNodeOnEnter)
+            .val(data.label);
         editNodeModal.find('#btn_confirm_edit')[0].onclick = saveData.bind(this, data, callback);
         editNodeModal.find('.close-button')[0].onclick = cancelEdit.bind(this, callback);
 
         editNodeModal.foundation('open');
+    }
+
+    function changeNodeOnEnter(e){
+        let code = e.keyCode ? e.keyCode : e.which;
+        let enterKeyCode = 13;
+        console.log("key  pressed");
+        if(code === enterKeyCode){
+            $('#editNodeModal').find('#btn_confirm_edit').click();
+        }
     }
 
     function saveData(data, callback) {

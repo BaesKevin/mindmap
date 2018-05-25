@@ -1,31 +1,26 @@
-let network;
-
 $(document).foundation();
 
 $(document).ready(function(){
+
+    let networkName = getQueryStringParam('name');
+    let container = document.getElementById('mynetwork');
+    let network = new VisNetwork(container, new VisNetworkData(networkName));
+
+    persistence.documentLoaded(network);
+    ConnectionStatusModule.documentLoaded();
+
+    $('h1').text(networkName);
     document.getElementById("exportButton").onclick = function(e){
         e.preventDefault();
-        persistenceModule.exportNetwork(network);
+        persistence.exportNetwork();
     };
     document.getElementById("saveAndQuitButton").onclick = saveAndGoHome;
 
-    let networkName = getQueryStringParam('name');
-    createNetwork(networkName);
-    addOnlineOfflineEventListeners();
-    persistenceModule.importNetwork(networkName);
-
-    $('h1').text(networkName);
 });
-
-function createNetwork(networkName) {
-	let container = document.getElementById('mynetwork');
-	network = new VisNetwork(container, new VisNetworkData(networkName));
-
-}
 
 function saveAndGoHome(e) {
 	e.preventDefault();
 
-    persistenceModule.exportNetwork(network);
+    persistence.exportNetwork(network);
 	location.href = "/";
 }
