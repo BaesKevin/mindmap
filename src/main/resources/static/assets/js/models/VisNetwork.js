@@ -20,7 +20,8 @@ let VisNetwork = (function () {
     }
 
     const visNetworkOptions = {
-        interaction: { hover: true },
+        interaction: { hover: true,navigationButtons: true, },
+
         manipulation: {
             enabled: true,
             editNode: editNode
@@ -35,9 +36,6 @@ let VisNetwork = (function () {
         },
         physics: {
             enabled: false
-        },
-        interaction: {
-            navigationButtons: true
         }
     };
 

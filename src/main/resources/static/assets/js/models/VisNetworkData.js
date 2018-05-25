@@ -4,7 +4,6 @@ function VisNetworkData(name, nodes, edges) {
     this.edges = edges !== undefined ? edges : new vis.DataSet();
 
     this.nodes = cleanNodes(this.nodes);
-    console.log(this.nodes);
 }
 
 VisNetworkData.prototype.getJson = function(){

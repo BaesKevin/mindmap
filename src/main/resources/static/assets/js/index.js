@@ -1,5 +1,6 @@
 const url = "/mindmap/names";
 
+// TODO also compare with localstorage and delete unused networks
 function getNetworkNames(){
 	return fetch(url, {credentials: 'same-origin'}).then(response => response.json());
 }

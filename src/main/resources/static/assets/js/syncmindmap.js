@@ -12,6 +12,6 @@ function updateOnlineStatus(event) {
     if(condition === "online"){
     	console.log("we're back online, time to sync");
     	
-    	importNetwork();
+    	persistenceModule.importNetwork(getQueryStringParam('name'));
     }
 }
