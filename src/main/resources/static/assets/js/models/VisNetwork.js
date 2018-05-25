@@ -49,11 +49,11 @@ let VisNetwork = (function () {
         this.network = new vis.Network(container,networkData, visNetworkOptions);
     }
 
-    // expects a VisNetworkData object
+    // expects a NetworkExportData object
     VisNetwork.prototype.initOrUpdateNetwork = function (data) {
         this.networkData = data;
         this.network.setData({ nodes: data.nodes, edges: data.edges });
-    }
+    };
 
 
     
