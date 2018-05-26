@@ -1,5 +1,5 @@
 import 'script-loader!jquery/dist/jquery.min.js';
-import "script-loader!vis/dist/vis.min.js";
+import "script-loader!vis/dist/vis-network.min.js";
 import "script-loader!what-input/dist/what-input.min.js";
 import "script-loader!foundation-sites/dist/js/foundation.min.js";
 import 'script-loader!localforage/dist/localforage.min.js';
