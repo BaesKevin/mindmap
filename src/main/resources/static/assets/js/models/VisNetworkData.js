@@ -1,3 +1,5 @@
+import {isNumeric} from "../util.js";
+
 function VisNetworkData(name, nodes, edges) {
 	this.name = name;
     this.nodes = nodes !== undefined ? nodes : new vis.DataSet();

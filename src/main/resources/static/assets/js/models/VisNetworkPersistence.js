@@ -1,5 +1,5 @@
 import VisNetworkData from "./VisNetworkData.js";
-
+import {postData} from "../util.js";
 // singleton for the persistence
 const persistence = (function(){
 

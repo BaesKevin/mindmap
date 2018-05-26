@@ -1,3 +1,5 @@
+import persistence from "./VisNetworkPersistence.js";
+
 const ConnectionStatusModule = (function(){
     let module = {
         connectionStatus:"online",

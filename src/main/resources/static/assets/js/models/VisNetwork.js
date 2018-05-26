@@ -54,7 +54,6 @@ let VisNetwork = (function () {
     
 
     function VisNetwork(container, networkData) {
-        // let container = document.querySelector('mynetwork');
         this.networkData = networkData;
         this.network = new vis.Network(container,networkData, visNetworkOptions);
     }
