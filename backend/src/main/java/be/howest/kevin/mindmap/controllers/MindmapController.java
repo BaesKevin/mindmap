@@ -22,7 +22,7 @@ public class MindmapController {
 	@Autowired
 	private MindMapRepository mmRepo;
 	
-	@RequestMapping("/mindmap/names")
+	@RequestMapping("/api/mindmap/names")
 	List<String> getMindMapNames(Principal principal) {
 		Iterable<MindMap> fromDb = mmRepo.findAll();
 		List<String> names = new ArrayList<>();
@@ -37,7 +37,7 @@ public class MindmapController {
 		return names;
 	}
 	
-	@RequestMapping("/mindmap/{id}")
+	@RequestMapping("/api/mindmap/{id}")
 	MindMap getMindMap(@PathVariable String id, Principal principal) {
 		// TODO validation
 		Optional<MindMap> fromDb = mmRepo.findById(id);
@@ -53,7 +53,7 @@ public class MindmapController {
 		return null;
 	}
 	
-	@RequestMapping(value="/savemindmap", method=RequestMethod.POST)
+	@RequestMapping(value="/api/savemindmap", method=RequestMethod.POST)
 	void saveMindMap(@RequestBody MindMap map, Principal principal) {
 		try {
 			Optional<MindMap> existing = mmRepo.findById(map.getName());
@@ -70,7 +70,7 @@ public class MindmapController {
 		}
 	}
 	
-	@RequestMapping(value="/createmindmap", method=RequestMethod.POST)
+	@RequestMapping(value="/api/createmindmap", method=RequestMethod.POST)
 	void createMindMap(String mindmap_name, HttpServletResponse response, Principal principal) {
 		String username = principal.getName();
 		

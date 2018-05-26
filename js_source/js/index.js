@@ -1,6 +1,6 @@
 import 'script-loader!jquery/dist/jquery.min.js';
 
-const url = "/mindmap/names";
+const url = "/api/mindmap/names";
 
 // TODO also compare with localstorage and delete unused networks
 function getNetworkNames(){

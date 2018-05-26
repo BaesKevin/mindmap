@@ -28,7 +28,7 @@ const persistence = (function(){
 
     function exportNetworkToServer(data) {
 
-        return postData("/savemindmap", data)
+        return postData("/api/savemindmap", data)
             .then(response => {
                     return Promise.resolve(response.text());
                 }
@@ -100,7 +100,7 @@ const persistence = (function(){
 
 
     function loadNetworkFromserver(name) {
-        return fetch("mindmap/" + name, {
+        return fetch("/api/mindmap/" + name, {
             credentials: 'same-origin'
         })
             .then(response => response.json())
