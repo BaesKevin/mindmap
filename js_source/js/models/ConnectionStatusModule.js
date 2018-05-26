@@ -1,4 +1,6 @@
 import persistence from "./VisNetworkPersistence.js";
+import { getQueryStringParam  } from "../util.js";
+
 
 const ConnectionStatusModule = (function(){
     let module = {

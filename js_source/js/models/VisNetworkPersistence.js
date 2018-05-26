@@ -57,7 +57,7 @@ const persistence = (function(){
                     console.log("Server is synced: " + isServerSynced);
 
                     if (!isServerSynced) {
-                        syncBasedOnUsersChoice(storageData, networkData);
+                        syncBasedOnUsersChoice.call(this, storageData, networkData);
                     } else {
                         this.network.initOrUpdateNetwork(networkData);
                     }
@@ -77,11 +77,13 @@ const persistence = (function(){
 
         let syncStrategyModal = $('#chooseSyncStrategyModal');
 
+        let self = this;
+        
         syncStrategyModal.find('[data-sync-strategy="overwriteServer"]').one('click', function (e) {
             e.preventDefault();
 
             exportNetworkToServer(dataFromStorage.getJson()).then(_ => console.log("sync successful"));
-            this.network.initOrUpdateNetwork(dataFromStorage);
+            self.network.initOrUpdateNetwork(dataFromStorage);
             syncStrategyModal.foundation("close");
         });
 
@@ -89,7 +91,7 @@ const persistence = (function(){
             e.preventDefault();
 
             exportNetworkToStorage(dataFromServer.getJson());
-            this.network.initOrUpdateNetwork(dataFromServer);
+            self.network.initOrUpdateNetwork(dataFromServer);
             syncStrategyModal.foundation("close");
         });
 
