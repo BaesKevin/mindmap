@@ -6,20 +6,31 @@ self.addEventListener('install', function (event) {
 
 //If any fetch fails, it will look for the request in the cache and serve it from there first
 self.addEventListener('fetch', function (event) {
-    var updateCache = function (request) {
-        let isApiCall = request.url.indexOf("/api/") !== -1;
+    var isCachingAllowed = function(request){
         let isHttpGet = request.method === "GET";
+        // "login"  one has something to do with the way the 2 auth back and forth works
+        // if we don't check for this every page asks for google credentials
 
-        if (!isApiCall && isHttpGet) {
-            return caches.open('mindmap').then(function (cache) {
-                return fetch(request).then(function (response) {
+        let cacheDisabledUrls = ["/api/", "/login", "/sw.js", "registerSw.js"];
 
-                    console.log('[PWA Builder] add page to offline' + response.url)
-                    return cache.put(request, response);
+        let isCacheDisabledUrl = cacheDisabledUrls.some( function(cacheDisabledUrl){
+            return request.url.indexOf(cacheDisabledUrl) !== -1;
+        });
 
-                });
+        return !isCacheDisabledUrl
+    }
+
+    var updateCache = function (request) {
+        if(!isCachingAllowed(request)) return;
+
+        return caches.open('mindmap').then(function (cache) {
+            return fetch(request).then(function (response) {
+
+                console.log('[PWA Builder] add page to offline' + response.url)
+                return cache.put(request, response);
+
             });
-        }
+        });
     };
 
     event.waitUntil(updateCache(event.request));
@@ -32,10 +43,14 @@ self.addEventListener('fetch', function (event) {
             //Return response
             //If not in the cache, then return error page
             return caches.open('mindmap').then(function (cache) {
-                return cache.match(event.request).then(function (matching) {
-                    var report = !matching || matching.status == 404 ? Promise.reject('no-match') : matching;
-                    return report
-                });
+                return cache.match(event.request)
+                    .then(function (matching) {
+                        var report = !matching || matching.status == 404 ? Promise.reject('no-match') : matching;
+                        return report
+                    })
+                    .catch(error => {
+                        console.warn("Url not in cache or available on network: " + event.request.url);
+                    });
             });
         })
     );

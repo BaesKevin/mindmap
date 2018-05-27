@@ -1,13 +1,15 @@
 import VisNetworkData from "./VisNetworkData.js";
-import {postData} from "../util.js";
-// singleton for the persistence
-const persistence = (function(){
+import { postData } from "../util.js";
+import ConnectionStatusModule from "./ConnectionStatusModule.js";
 
-    function VisNetworkPersistence(network){
+// singleton for the persistence
+const persistence = (function () {
+
+    function VisNetworkPersistence(network) {
         this.network = network;
     }
 
-    VisNetworkPersistence.prototype.exportNetwork = function() {
+    VisNetworkPersistence.prototype.exportNetwork = function () {
         exportNetworkToStorage(this.network.networkData.getJson());
         exportNetworkToServer(this.network.networkData.getJson()).then(_ => {
             $('[data-toggle="offCanvas"]').click();
@@ -30,55 +32,65 @@ const persistence = (function(){
 
         return postData("/api/savemindmap", data)
             .then(response => {
-                    return Promise.resolve(response.text());
-                }
+                return Promise.resolve(response.text());
+            }
             )
             .catch(error => {
                 console.info("couldn't save network to server"); throw error;
             });
     }
 
-// load the network from storage and server, check if they match, overwrite
-// server with localstorage
-// TODO give the user a choice to overwrite server with localstorage or vice
-// versa,
-// useful when the user worked in a different browser or on a different device
-    VisNetworkPersistence.prototype.importNetwork = function(networkName) {
+    // load the network from storage and server, check if they match, overwrite
+    // server with localstorage
+    // TODO give the user a choice to overwrite server with localstorage or vice
+    // versa,
+    // useful when the user worked in a different browser or on a different device
+    VisNetworkPersistence.prototype.importNetwork = function (networkName) {
 
+        function importFromStorageAndNetwork(networkName) {
+            loadNetworkFromStorage(networkName)
+                .then(storageData => {
+                    loadNetworkFromserver(networkName).then(networkData => {
+                        let isServerSynced = storageData.equals(networkData);
+                        console.log("Server is synced: " + isServerSynced);
+
+                        if (!isServerSynced) {
+                            syncBasedOnUsersChoice.call(this, storageData, networkData);
+                        } else {
+                            this.network.initOrUpdateNetwork(networkData);
+                        }
+
+                    });
+                });
+        }
+
+        function importFromStorage(networkName){
+            loadNetworkFromStorage(networkName)
+                .then(storageData => this.network.initOrUpdateNetwork(storageData));
+        }
 
         if (!networkName) {
             location.href = "/";
         }
 
-        loadNetworkFromStorage(networkName)
-            .then(storageData => {
-                loadNetworkFromserver(networkName).then(networkData => {
-                    let isServerSynced = storageData.equals(networkData);
-                    console.log("Server is synced: " + isServerSynced);
-
-                    if (!isServerSynced) {
-                        syncBasedOnUsersChoice.call(this, storageData, networkData);
-                    } else {
-                        this.network.initOrUpdateNetwork(networkData);
-                    }
-
-                });
-            });
-
-
+        if (ConnectionStatusModule.isOnline()) {
+            importFromStorageAndNetwork.call(this,networkName);
+        } else {
+            importFromStorage.call(this,networkName);
+        }
     }
 
-// if the user wants to keep their local changes, push local changes to the
-// server and init the network with local data
-// else pull the remote changes, update local storage and load the network with
-// remote changes
+    // if the user wants to keep their local changes, push local changes to the
+    // server and init the network with local data
+    // else pull the remote changes, update local storage and load the network with
+    // remote changes
     function syncBasedOnUsersChoice(dataFromStorage, dataFromServer) {
         console.log("Server is not in sync: sync data");
 
         let syncStrategyModal = $('#chooseSyncStrategyModal');
 
         let self = this;
-        
+
         syncStrategyModal.find('[data-sync-strategy="overwriteServer"]').one('click', function (e) {
             e.preventDefault();
 
@@ -105,7 +117,7 @@ const persistence = (function(){
         })
             .then(response => response.json())
             .then(json => {
-                let networkData = new VisNetworkData(json.name, new vis.DataSet(json.nodes),new vis.DataSet(json.edges))
+                let networkData = new VisNetworkData(json.name, new vis.DataSet(json.nodes), new vis.DataSet(json.edges))
 
                 return Promise.resolve(networkData);
             })

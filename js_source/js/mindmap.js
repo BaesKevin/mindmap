@@ -26,13 +26,13 @@ $(document).ready(function(){
         e.preventDefault();
         persistence.exportNetwork();
     };
-    document.getElementById("saveAndQuitButton").onclick = saveAndGoHome;
+    document.getElementById("saveAndQuitButton").onclick = function saveAndGoHome(e) {
+        e.preventDefault();
+    
+        persistence.exportNetwork(network);
+        location.href = "/";
+    };
 
 });
 
-function saveAndGoHome(e) {
-	e.preventDefault();
 
-    persistence.exportNetwork(network);
-	location.href = "/";
-}

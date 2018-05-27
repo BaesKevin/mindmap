@@ -5,7 +5,8 @@ import { getQueryStringParam  } from "../util.js";
 const ConnectionStatusModule = (function(){
     let module = {
         connectionStatus:"online",
-        documentLoaded: documentLoaded
+        documentLoaded: documentLoaded,
+        isOnline: isOnline
     };
 
     function documentLoaded(){
@@ -16,6 +17,10 @@ const ConnectionStatusModule = (function(){
 
         window.addEventListener('online',  updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
+    }
+
+    function isOnline(){
+        return navigator.onLine;
     }
 
     function updateOnlineStatus(event) {
