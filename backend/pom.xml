@@ -6,7 +6,7 @@
 	<groupId>be.howest.kevin</groupId>
 	<artifactId>mindmap</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>mindmap</name>
 	<description>Mindmap progressive web app</description>
