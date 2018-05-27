@@ -19,7 +19,6 @@ $(document).ready(function(){
     let network = new VisNetwork(container, new VisNetworkData(networkName));
 
     persistence.documentLoaded(network);
-    ConnectionStatusModule.documentLoaded();
 
     $('h1').text(networkName);
     document.getElementById("exportButton").onclick = function(e){
@@ -33,6 +32,27 @@ $(document).ready(function(){
         location.href = "/";
     };
 
+    setConnectionStatusText(ConnectionStatusModule.isOnline());
+    window.addEventListener('online',  connectionStatusChanged);
+    window.addEventListener('offline', connectionStatusChanged);
+
 });
 
+function connectionStatusChanged(event) {
+    let isOnline=  ConnectionStatusModule.isOnline();
+    setConnectionStatusText(isOnline);
 
+    if(isOnline){
+        console.log("we're back online, time to sync");
+
+        persistence.importNetwork(getQueryStringParam('name'));
+    }
+}
+
+function setConnectionStatusText(isOnline){
+    if(isOnline){
+        document.getElementById("networkstatus").innerHTML = "online";
+    } else {
+        document.getElementById("networkstatus").innerHTML = "offline";
+    }
+}

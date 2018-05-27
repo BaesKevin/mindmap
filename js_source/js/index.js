@@ -53,12 +53,21 @@ function hideCreateMindmapFormIfOffline(){
 	}
 }
 
+function initConnectionStatusDetection(){
+	window.addEventListener('online',  connectionStatusChanged);
+    window.addEventListener('offline', connectionStatusChanged);
+}
+
+function connectionStatusChanged(e){
+	window.location.reload();
+}
+
 function init() {
 	hideCreateMindmapFormIfOffline();
-
-	getNetworkNames().then(names => {
-		initNetworkNamesList(names);
-	}).catch(error => { console.info("couldn't get network names"); throw error; });
+	initConnectionStatusDetection();
+	getNetworkNames()
+		.then(names => { initNetworkNamesList(names); })
+		.catch(error => { console.info("couldn't get network names"); throw error; });
 }
 
 function initNetworkNamesList(names){
