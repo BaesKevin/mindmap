@@ -14,3 +14,18 @@ module.exports = {
         minimize: false
       }
 };
+
+// module.exports = {
+//     mode: "production",
+//     entry: {
+//         index: "./js/index.js",
+//         mindmap: "./js/mindmap.js"
+//     },
+//     output: {
+//         filename: "./../../backend/src/main/resources/static/assets/js/[name].js"
+//     }
+//     // ,
+//     // optimization: {
+//     //     minimize: false
+//     // }
+// };
