@@ -15,13 +15,13 @@ public class MindmapApplication extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-
-			.headers()
-				.addHeaderWriter(new StaticHeadersWriter("Upgrade-Insecure-Requests","1")).and()
 			.csrf()
 			.disable()
 				.antMatcher("/**")
-					.authorizeRequests()
+					.headers()
+						.addHeaderWriter(new StaticHeadersWriter("Upgrade-Insecure-Requests","1"))
+					.and()
+						.authorizeRequests()
 				.antMatchers("/assets/**","/sw.js","/manifest.json","/images/**")
 					.permitAll()
 				.anyRequest()
