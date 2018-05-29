@@ -64,7 +64,34 @@ function connectionStatusChanged(e){
 	window.location.reload();
 }
 
+function deleteNetworkHandler(e){
+	console.log($(this).data('network-to-delete'));
+	let networkName = $(this).data('network-to-delete');
+	deleteNetworkFromServer(networkName)
+		.then(_ => {
+			return localforage.removeItem(networkName);
+		})
+		.then(
+			_ => getNamesFromStorage()
+				.then(names => { initNetworkNamesList(names); })
+		).then(_ => console.log("reinitialized page"));
+}
+
+function deleteNetworkFromServer(networkName){
+	return fetch('/api/deletemindmap', 
+		{
+			body: networkName,
+			credentials: 'same-origin',
+			headers: {
+				'content-type': 'application/json'
+			},
+			method: 'POST'
+		}).catch(error => "couldn't delete network");
+}
+
 function init() {
+	$('#networkList').on('click', '[data-network-to-delete]', deleteNetworkHandler);
+
 	hideCreateMindmapFormIfOffline();
 	initConnectionStatusDetection();
 	getNetworkNames()
@@ -78,14 +105,22 @@ function initNetworkNamesList(names){
 	if (names.length > 0) {
 		let list = "<div class='cell large-4 large-offset-4 small-8 small-offset-2'><ul  class='no-bullet'>";
 		names.forEach(name => {
-			list += `<li ><a class='mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a></li>`;
+			list += `<li >
+				<a class='mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a>
+				<a class='mindmap-delete-button' href="#" data-network-to-delete="${name}">Delete</a>
+			</li>`;
 		})
 
 		list += "</ul></div>";
 
 		networkNamesListContainer.html(list);
-	} else {
-		networkNamesListContainer.children('span').text("You don't have any networks yet, try creating one by entering a name in the text field above.");
+	} else{
+		networkNamesListContainer.html(`
+			
+		<span class="cell large-4 large-offset-4 small-10 small-offset-1 medium-8 medium-offset-2">
+		You don't have any networks yet, try creating one by entering a name in the text field above.
+		</span>
+		`);
 	}
 }
 
