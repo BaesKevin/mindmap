@@ -24,7 +24,7 @@ const persistence = (function () {
 
     function exportNetworkToStorage(data) {
         localforage
-            .setItem(data.name, JSON.stringify(data))
+            .setItem(data.id.name, JSON.stringify(data))
             .catch(error => console.info("LocalForage couldn't save network " + networkName));
     }
 
@@ -117,7 +117,7 @@ const persistence = (function () {
         })
             .then(response => response.json())
             .then(json => {
-                let networkData = new VisNetworkData(json.name, new vis.DataSet(json.nodes), new vis.DataSet(json.edges))
+                let networkData = new VisNetworkData(json.id.name, new vis.DataSet(json.nodes), new vis.DataSet(json.edges))
 
                 return Promise.resolve(networkData);
             })
@@ -143,7 +143,7 @@ const persistence = (function () {
             let networkData = JSON.parse(networkFromStorage);
             newnodes = new vis.DataSet(networkData.nodes);
             newedges = new vis.DataSet(networkData.edges);
-            name = networkData.name;
+            name = networkData.id.name;
         }
         else {
             console.log('the impossible happened');

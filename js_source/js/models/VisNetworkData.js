@@ -10,7 +10,9 @@ function VisNetworkData(name, nodes, edges) {
 
 VisNetworkData.prototype.getJson = function(){
     return {
-        name: this.name,
+        id: {
+            name: this.name
+        },
         nodes: this.nodes.get(),
         edges: this.edges.get()
     }

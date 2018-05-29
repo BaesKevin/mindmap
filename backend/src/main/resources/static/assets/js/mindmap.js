@@ -335,7 +335,9 @@ function VisNetworkData(name, nodes, edges) {
 
 VisNetworkData.prototype.getJson = function(){
     return {
-        name: this.name,
+        id: {
+            name: this.name
+        },
         nodes: this.nodes.get(),
         edges: this.edges.get()
     }
@@ -457,7 +459,7 @@ const persistence = (function () {
 
     function exportNetworkToStorage(data) {
         localforage
-            .setItem(data.name, JSON.stringify(data))
+            .setItem(data.id.name, JSON.stringify(data))
             .catch(error => console.info("LocalForage couldn't save network " + networkName));
     }
 
@@ -550,7 +552,7 @@ const persistence = (function () {
         })
             .then(response => response.json())
             .then(json => {
-                let networkData = new _VisNetworkData_js__WEBPACK_IMPORTED_MODULE_0__["default"](json.name, new vis.DataSet(json.nodes), new vis.DataSet(json.edges))
+                let networkData = new _VisNetworkData_js__WEBPACK_IMPORTED_MODULE_0__["default"](json.id.name, new vis.DataSet(json.nodes), new vis.DataSet(json.edges))
 
                 return Promise.resolve(networkData);
             })
@@ -576,7 +578,7 @@ const persistence = (function () {
             let networkData = JSON.parse(networkFromStorage);
             newnodes = new vis.DataSet(networkData.nodes);
             newedges = new vis.DataSet(networkData.edges);
-            name = networkData.name;
+            name = networkData.id.name;
         }
         else {
             console.log('the impossible happened');

@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
 public class MindMap {
-	@Id
-	String name;
+//	@Id
+//	String name;
+	
+	@EmbeddedId
+	MindmapId id;
 	
 	@OneToMany(cascade = CascadeType.ALL, 
 	        orphanRemoval = true)
@@ -19,7 +23,7 @@ public class MindMap {
 	@OneToMany(cascade = CascadeType.ALL, 
 	        orphanRemoval = true)
 	List<Edge> edges;
-	private String username;
+//	private String username;
 	
 	private MindMap() {
 
@@ -29,16 +33,7 @@ public class MindMap {
 	
 	public MindMap(String name, String username) {
 		this();
-		this.name = name;
-		this.username = username;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		this.id = new MindmapId(username, name);
 	}
 
 	public List<Node> getNodes() {
@@ -57,13 +52,14 @@ public class MindMap {
 		this.edges = edges;
 	}
 
-	public String getUsername() {
-		return username;
+	public MindmapId getId() {
+		return id;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setId(MindmapId id) {
+		this.id = id;
 	}
+	
 	
 	
 }
