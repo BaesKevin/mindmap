@@ -106,8 +106,10 @@ function initNetworkNamesList(names){
 		let list = "<div class='cell large-4 large-offset-4 small-8 small-offset-2'><ul  class='no-bullet'>";
 		names.forEach(name => {
 			list += `<li >
-				<a class='mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a>
-				<a class='mindmap-delete-button' href="#" data-network-to-delete="${name}">Delete</a>
+				<div class="grid-x">
+					<a class='cell small-8 mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a>
+					<a class='cell small-2 mindmap-delete-button' href="#" data-network-to-delete="${name}">X</a>
+				</div>
 			</li>`;
 		})
 
