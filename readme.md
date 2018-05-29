@@ -31,10 +31,11 @@ De mindmap wordt opgeslaan met het id van de googlegebruiker. Het Spring Securit
 
 **frontend**
 In de frontend gebruik ik ```foundation-sites``` voor het design en ```vis.js``` om de mindmaps te tekenen en aan te passen.
-2 beslissingen in de front-end mbt. tot caching:
+2 beslissingen in de front-end mbt. tot offline functionaliteit:
 
+* bij het laden van de index worden de netwerken die enkel lokaal bestaan verwijdert. Dit omdat de gebruiker het netwerk op een ander device/andere browser verwijderd kan hebben.
 * bij het laden of online komen van de client in de mindmap editor wordt gevraagd of de gebruiker zijn lokale versie of versie op de server wil houden. Dit is zo gemaakt omdat er voor beide keuzes toepassingen zijn: je wil je lokale changes houden als je even online bent geweest en terug online komt, en je wil je lokale versie verwijderen als je op een ander device/browser hebt gewerkt.
-* bij het laden van de index worden de netwerken die enkel lokaal bestaan verwijdert. Dit omdat de gebruiker het netwerk op een ander device/andere browser verwijdert kan hebben.
+
 
 **serviceworker**
 
