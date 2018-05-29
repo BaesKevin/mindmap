@@ -1,6 +1,8 @@
 import 'script-loader!jquery/dist/jquery.min.js';
 import 'script-loader!localforage/dist/localforage.min.js';
 import ConnectionStatusModule from "./models/ConnectionStatusModule.js";
+import "../css/foundation/foundation.min.css";
+import "../css/app.css";
 
 const url = "/api/mindmap/names";
 

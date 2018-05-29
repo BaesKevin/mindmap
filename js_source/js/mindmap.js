@@ -10,6 +10,10 @@ import ConnectionStatusModule from "./models/ConnectionStatusModule.js";
 import persistence from "./models/VisNetworkPersistence.js";
 import { getQueryStringParam } from "./util.js";
 
+import "../node_modules/foundation-sites/dist/css/foundation.min.css";
+import "../node_modules/vis/dist/vis-network.min.css";
+import "../css/app.css";
+
 $(document).foundation();
 
 $(document).ready(function(){

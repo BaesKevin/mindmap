@@ -14,7 +14,7 @@
 
 .mindmap-listitem{
 	display: block;
-	color: vertical-align: middle;
+	vertical-align: middle;
     margin: 0 0 1rem 0;
     font-family: inherit;
     padding: 0.85em 1em;

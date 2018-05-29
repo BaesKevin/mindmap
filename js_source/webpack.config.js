@@ -24,5 +24,29 @@ module.exports = {
     },
     output: {
         filename: "./../../backend/src/main/resources/static/assets/js/[name].min.js"
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(png|jpg|gif)$/,
+                use: [
+                    {
+                        loader: 'url-loader'
+                    }
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            minimize: true
+                        }
+                    }
+                ]
+            }
+        ]
     }
 };
