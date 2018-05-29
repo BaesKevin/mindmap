@@ -4,6 +4,7 @@
 [heroku app](https://mindmapper.herokuapp.com)
 
 Het kan dat de heroku app even tijd nodig heeft om te laden aangezien de free tier servers slapen als er even geen requests zijn.
+Er is een zeldzame niet-reproduceerbare bug waarbij je 2 keer moet inloggen met google en dan een errorpagina te zien krijgt. Gewoon nog eens naar de site surfen en alles is in orde.
 
 ## Projectbeschrijving en verloop project
 

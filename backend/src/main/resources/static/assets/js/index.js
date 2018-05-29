@@ -202,7 +202,7 @@ function removeLocalOnlyNetworks(namesFromStorage, namesFromNetwork) {
 function hideCreateMindmapFormIfOffline(){
 	if(!_models_ConnectionStatusModule_js__WEBPACK_IMPORTED_MODULE_2__["default"].isOnline()){
 		$('#form_create_mindmap')
-			.html("<p class='text-center'>You are offline. You can work on mindmaps that you've created before.</p>")
+			.html("<p class='text-center'>You are offline. You can't create mindmaps while offline.</p>")
 	}
 }
 
@@ -217,7 +217,7 @@ function connectionStatusChanged(e){
 
 function deleteNetworkHandler(e){
 	console.log($(this).data('network-to-delete'));
-	let networkName = $(this).data('network-to-delete');
+	let networkName = String($(this).data('network-to-delete'));
 	deleteNetworkFromServer(networkName)
 		.then(_ => {
 			return localforage.removeItem(networkName);
@@ -231,7 +231,7 @@ function deleteNetworkHandler(e){
 function deleteNetworkFromServer(networkName){
 	return fetch('/api/deletemindmap', 
 		{
-			body: networkName,
+			body: String(networkName),
 			credentials: 'same-origin',
 			headers: {
 				'content-type': 'application/json'
@@ -256,22 +256,34 @@ function initNetworkNamesList(names){
 	if (names.length > 0) {
 		let list = "<div class='cell large-4 large-offset-4 small-8 small-offset-2'><ul  class='no-bullet'>";
 		names.forEach(name => {
-			list += `<li >
-				<div class="grid-x">
-					<a class='cell small-8 mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a>
-					<a class='cell small-2 mindmap-delete-button' href="#" data-network-to-delete="${name}">X</a>
-				</div>
-			</li>`;
+			let li = `<li ><div class="grid-x">`;
+			if(_models_ConnectionStatusModule_js__WEBPACK_IMPORTED_MODULE_2__["default"].isOnline()){
+				li += `
+				<a class='cell small-10 mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a>
+					<a class='cell small-2 mindmap-delete-button' href="#" data-network-to-delete="${name}">X</a>`
+			} else {
+				li += `
+				<a class='cell small-12 mindmap-listitem' href="/mindmap.html?name=${name}">${name}</a>`;
+			}
+
+			li += "</div></li>";
+			list += li;
 		})
 
 		list += "</ul></div>";
 
 		networkNamesListContainer.html(list);
 	} else{
+		let text=  "You don't have any mindmaps yet. ";
+
+		if(!_models_ConnectionStatusModule_js__WEBPACK_IMPORTED_MODULE_2__["default"].isOnline()){
+			text +=  "You can only work on mindmaps offline that you've saved in this browser.";
+		}
+
 		networkNamesListContainer.html(`
 			
 		<span class="cell large-4 large-offset-4 small-10 small-offset-1 medium-8 medium-offset-2">
-		You don't have any networks yet, try creating one by entering a name in the text field above.
+		You don't have any mindmaps yet. You can only work on mindmaps that you've saved in this browser.
 		</span>
 		`);
 	}
